@@ -1,0 +1,13 @@
+[09-Mar-2024 16:32:33 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\RestaurantReservation\paypal_checkout_validate.php on line 66
+[09-Mar-2024 16:32:33 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method PDOStatement::bind_param() in C:\xampp\htdocs\RestaurantReservation\paypal_checkout_validate.php:77
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\RestaurantReservation\paypal_checkout_validate.php on line 77
+[09-Mar-2024 17:04:45 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\RestaurantReservation\paypal_checkout_validate.php on line 66
+[09-Mar-2024 18:40:45 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\RestaurantReservation\paypal_checkout_validate.php on line 75
+[09-Mar-2024 18:44:03 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\RestaurantReservation\paypal_checkout_validate.php on line 75
+[13-Mar-2024 20:18:37 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\RestaurantReservation\paypal_checkout_validate.php on line 75
+[13-Mar-2024 20:28:54 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\RestaurantReservation\paypal_checkout_validate.php on line 75
+[13-Mar-2024 20:29:16 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\RestaurantReservation\paypal_checkout_validate.php on line 75
+[14-Mar-2024 14:44:25 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\RestaurantReservation\paypal_checkout_validate.php on line 75
+[26-Mar-2024 20:59:11 Europe/Berlin] PHP Deprecated:  Constant FILTER_SANITIZE_STRING is deprecated in C:\xampp\htdocs\RestaurantReservation\paypal_checkout_validate.php on line 75
