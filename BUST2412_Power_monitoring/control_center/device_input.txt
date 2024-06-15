@@ -1,0 +1,48 @@
+
+#include "device_config.h"
+#include <ClickButton.h>
+
+#define BUTTON D0
+
+ClickButton button(BUTTON, LOW, CLICKBTN_PULLUP);
+
+bool device_inputSetup( void )
+{
+    button.debounceTime   = 20;   
+    button.multiclickTime = 250;  
+    button.longClickTime  = 1500; 
+
+    return true;
+}
+
+DEVICE_COMMAND device_inputRead(void)
+{
+    button.Update();
+
+    if(button.clicks != 0)
+    {
+        #ifdef DEVICE_DEBUG
+            Serial.print("Button cicked: ");
+            Serial.println(button.clicks);
+        #endif
+
+        switch(button.clicks)
+        {
+            case -1:
+                return CMD_DEVICE_RESET;
+            break;
+
+            case 1:
+                return CMD_SWITCH_SERVER;
+            break;
+
+            case 2:
+                return CMD_SWITCH_LINE;
+            break;
+        }
+    }
+
+    return CMD_NONE;
+}
+
+/* ----------------------------------- EOF ---------------------------------- */

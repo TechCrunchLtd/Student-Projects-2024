@@ -1,0 +1,246 @@
+
+* {box-sizing: border-box}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial;
+    background: #555;
+}
+
+.all-content{
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+
+}
+
+.all-content::-webkit-scrollbar {
+    display: none;
+}
+  
+
+/* ----------------------------- header ---------------------------- */
+.header {
+    position: fixed;
+    background: #555;
+    color: #f1f1f1;
+    text-align: center;
+    width: 100%;
+}
+
+/* The sticky class is added to the header with JS when it reaches its scroll position */
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%
+}
+
+/* Style tab links */
+.tablink {
+    background-color: #555;
+    color: white;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 50%;
+}
+
+/* ------------------------------ main content ------------------------------ */
+.tabcontent {
+    color: white;
+    display: none;
+    padding: 50px 16px;
+    /* height: 100%; */
+    width: 100%;
+    text-align: center;
+}
+
+.homecontent {
+    margin-top: 20px;
+    padding: 0px 10%;
+}
+
+.content form {
+    border: 1px solid #ccc;
+}
+
+.homecontent p, .homecontent button {
+    background-color: #35f8b1;
+    color: #000;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0px;
+    padding: 10px 0px;
+    width: 100%;
+    border: none;
+}
+
+.homecontent p span {
+    padding-right: 10px;
+}
+
+.hometab img{
+    padding-top: 10px;
+    /* width: 50%; */
+}
+
+.hometab{
+    border: 1px solid #1cc;
+    width: 100%;
+    padding: 10px;
+}
+
+.hometab button{
+    cursor: pointer;
+}
+
+@media only screen and (min-width: 440px) {
+    .hometab{
+        float: left;
+        border: 1px solid #1cc;
+        width: 33%;
+        padding: 10px;
+    }  
+    
+}
+
+
+/* ----------------------------- Settings content ---------------------------- */
+/* Full-width input fields */
+.inputholder{
+    width: 100%;
+    padding: 10px 0px;
+    margin: 8px 0;
+    display: inline-block;
+    /* border: 1px solid #ccc; */
+    box-sizing: border-box;
+}
+
+.inputholder input {
+    max-width: 80%;
+    margin: 8px 0px;
+}
+
+.inputholder span {
+    display: inline-block;
+    background-color: rgb(62, 61, 57);
+    margin: 8px 0px;
+}
+
+#switchlight, #settingupdate, #alarmupdate, .pointer {
+    cursor: pointer;
+}
+
+
+/* ----------------------------- footer ---------------------------- */
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #282727;
+}
+/* Style tab links */
+.footerlink {
+    background-color: #282727;
+    color: white;
+    float: left;
+    border: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 33%;
+}
+
+.footerlink:hover {
+    background-color: #000;
+}
+
+/* --------------------------- start of login part -------------------------- */
+
+#loginmsg {
+    color: red;
+}
+
+/* Full-width input fields */
+.container input[type=text], .container input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+  
+/* Set a style for all buttons */
+.button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+  
+button:hover {
+    opacity: 0.5;
+}
+
+.imgcontainer {
+    text-align: center;
+    position: relative;
+}
+  
+img.avatar {
+    width: 100%;
+}
+  
+.container {
+    padding: 0px 16px 16px 16px;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.85); /* Black w/ opacity */
+    padding-top: 10px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #e7d8d8;
+    margin: 5% auto 15% auto;
+    border: 1px solid #888;
+    width: 70%; 
+}
+
+/* Add Zoom Animation */
+.animate {
+    -webkit-animation: animatezoom 2.0s;
+    animation: animatezoom 2.0s
+}
+
+@-webkit-keyframes animatezoom {
+    from {-webkit-transform: scale(0)} 
+    to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+    from {transform: scale(0)} 
+    to {transform: scale(1)}
+}
+
+/* ------------------------------- END OF FILE ------------------------------ */
