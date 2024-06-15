@@ -1,0 +1,93 @@
+
+.split {
+    height: 100%;
+    width: 50%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.left {
+    left: 0;
+    background-image: url("human.png");
+    background-color: #b6d6f0;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.right {
+    right: 0;
+    background-color: aqua;
+}
+
+.probes {
+    position: absolute;
+    z-index: 9;
+    background-color: #f1f1f1;
+    border: 1px solid #d3d3d3;
+    text-align: center;
+    border-radius: 25%;
+}
+  
+.probe-buttons {
+    padding: 10px;
+    cursor: move;
+    z-index: 10;
+    background-color: #2196F3;
+    color: #fff;
+    border-radius: 50%;
+}
+
+#probeRA {
+    top: 10px;
+    left: 10PX;
+}
+
+#probeLA {
+    top: 60px;
+    left: 10PX;
+}
+
+#probeLL {
+    top: 110px;
+    left: 10PX;
+}
+
+#start-button {
+    margin-left: 50px;
+    padding: 10px;
+    border-radius: 50%;
+    background-color: #10ff10;
+}
+
+#stop-button {
+    margin-left: 50px;
+    padding: 10px;
+    border-radius: 50%;
+    background-color: #f76402;
+}
+
+#start-button:hover, #stop-button:hover {
+    background-color: #2196F3;
+    border: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 80%;
+    border: 1px solid #ddd;
+    margin: auto;
+    margin-bottom: 30px;
+}
+
+th, td {
+    text-align: left;
+    padding: 16px;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}

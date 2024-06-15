@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Universsl ECG</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="chart.js" type="text/javascript"></script>
+    <script src="socketed.js" type="text/javascript"></script>
+</head>
+<body>
+    <div class="split left">
+        <div class="probes" id="probeRA">
+            <button class="probe-buttons" id="btn-RA">1</button>
+        </div>
+        <div class="probes" id="probeLA">
+            <button class="probe-buttons" id="btn-LA">2</button>
+        </div>
+        <div class="probes" id="probeLL">
+            <button class="probe-buttons" id="btn-LL">3</button>
+        </div>
+    </div>
+
+    <div class="split right">
+        <!-- <div>
+            <canvas id="sensorChart"></canvas>
+        </div> -->
+        <div class="table">
+            <table>
+                <tr>
+                    <th>RA</th>
+                    <th>LA</th>
+                    <th>LL</th>
+                </tr>
+                <tr>
+                    <td id="leadRA">0</td>
+                    <td id="leadLA">0</td>
+                    <td id="leadLL">0</td>
+                </tr>
+            </table>
+        </div>
+        <div style="text-align: center;">
+            <button id="start-button" type="button" onclick="submitProbeData()">START</button>
+            <button id="stop-button" type="button" onclick="revokeProbeData()">STOP</button>
+        </div>
+    </div>
+
+    <script>
+        const socket = io();
+
+        // const chartData = {
+        //     labels: [],
+        //     datasets: [{
+        //         label: 'Heart Pulse',
+        //         borderColor: 'blue',
+        //         data: [],
+        //         tension: 0.6
+        //     }]
+        // };
+
+        // const ctx = document.getElementById('sensorChart').getContext('2d');
+        // const sensorChart = new Chart(ctx, {
+        //     type: 'line',
+        //     data: chartData,
+        //     options: {
+        //         responsive: true,
+        //         scales: {
+        //             xAxes: [{
+        //                 type: 'time',
+        //                 time: {
+        //                     unit: 'second',
+        //                     displayFormats: {
+        //                         second: 'mm:ss'
+        //                     }
+        //                 },
+        //                 distribution: 'linear',
+        //                 ticks: {
+        //                     source: 'data',
+        //                     autoSkip: true
+        //                 }
+        //             }]
+        //         }
+        //     }
+        // });
+
+        socket.on('initialData', (data) => {
+            data.forEach((value, index) => {
+                sensorChart.data.labels.push(index);
+                sensorChart.data.datasets[0].data.push(value);
+            });
+            sensorChart.update();
+        });
+
+        socket.on('newData', (data) => {
+            console.log(data)
+            data.forEach(value=>{
+                const timestamp = new Date().toLocaleTimeString();
+                sensorChart.data.labels.push(timestamp);
+                sensorChart.data.datasets[0].data.push(value);
+                if (sensorChart.data.labels.length > 200) {
+                    sensorChart.data.labels.shift();
+                    sensorChart.data.datasets[0].data.shift();
+                }
+            });
+
+            // const timestamp = new Date().toLocaleTimeString();
+            // sensorChart.data.labels.push(timestamp);
+            // sensorChart.data.datasets[0].data.push(value);
+            // if (sensorChart.data.labels.length > 30) {
+            //     sensorChart.data.labels.shift();
+            //     sensorChart.data.datasets[0].data.shift();
+            // }
+            sensorChart.update();
+        });
+
+        function sendData(topic, data)
+        {
+            if(!topic && !data)
+            {
+                alert("Can't send with missing topic or data");
+                return;
+            }
+
+            socket.emit(topic, data);
+        }
+
+    </script>
+    <script src="index.js" type="text/javascript"></script>
+</body>
+</html>
