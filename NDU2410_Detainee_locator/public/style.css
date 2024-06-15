@@ -1,0 +1,354 @@
+
+* {box-sizing: border-box}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial;
+    background-image: url(images/police_logo.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+#mainpage {
+    height: 100%;
+    background-color: rgba(5, 5, 5, 0.75);
+}
+
+.all-content{
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.all-content::-webkit-scrollbar {
+    display: none;
+}
+  
+
+/* ----------------------------- header ---------------------------- */
+.header {
+    position: fixed;
+    background: #1a055d;
+    color: #1a055d;
+    text-align: center;
+    width: 100%;
+}
+
+/* The sticky class is added to the header with JS when it reaches its scroll position */
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%
+}
+
+/* Style tab links */
+.tablink {
+    background-color: #1a055d;
+    color: white;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 50%;
+}
+
+/* ------------------------------ main content ------------------------------ */
+.tabcontent {
+    color: white;
+    display: none;
+    padding: 50px 16px;
+    /* height: 100%; */
+    width: 100%;
+    text-align: center;
+}
+
+.homecontent {
+    margin-top: 20px;
+    padding: 0px 10%;
+}
+
+.homecontent p, .homecontent button {
+    background-color: #35f8b1;
+    color: #000;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0px;
+    padding: 10px 0px;
+    width: 100%;
+    border: none;
+}
+
+.homecontent p span {
+    padding-right: 10px;
+}
+
+/* ----------------------------- Settings content ---------------------------- */
+/* Full-width input fields */
+.inputholder{
+    width: 100%;
+    padding: 1px 0px;
+    margin: 5px 0;
+    display: inline-block;
+    /* border: 1px solid #ccc; */
+    box-sizing: border-box;
+}
+
+.inputholder input {
+    max-width: 80%;
+    margin: 5px 0px;
+}
+
+.inputholder span {
+    display: inline-block;
+    background-color: rgb(62, 61, 57);
+    margin: 5px 0px;
+}
+
+#settingupdate, #alarmupdate, .pointer {
+    cursor: pointer;
+}
+
+.reportpage {
+    padding: 10px;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #64696d;
+}
+
+th, td {
+    text-align: left;
+    padding: 16px;
+}
+
+tr:nth-child(even) {
+    background-color: #433c3c;
+}
+
+
+/* ----------------------------- footer ---------------------------- */
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #1a055d;
+}
+/* Style tab links */
+.footerlink {
+    background-color: #1a055d;
+    color: white;
+    float: left;
+    border: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 50%;
+}
+
+.footerlink:hover {
+    background-color: #3c248b;
+}
+
+/* --------------------------- start of login part -------------------------- */
+
+.errormsg {
+    color: red;
+}
+
+/* Full-width input fields */
+.container input[type=text], .container input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+  
+/* Set a style for all buttons */
+.button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+  
+button:hover {
+    opacity: 0.5;
+}
+
+  
+.container {
+    padding: 0px 16px 16px 16px;
+}
+
+.chip {
+    display: inline-block;
+    padding: 0 25px;
+    margin-bottom: 25px;
+    margin-left: 10x;
+    height: 50px;
+    font-size: 16px;
+    line-height: 50px;
+    border-radius: 25px;
+    background-color: #423333;
+    cursor: pointer;
+}
+  
+.chip img {
+    float: left;
+    margin: 0 10px 0 -25px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    margin: auto;
+    text-align: center;
+    font-family: arial;
+    background-color: #9a9c9c;
+  }
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.85); /* Black w/ opacity */
+    padding-top: 10px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #baaaaa;
+    margin: 5% auto 15% auto;
+    border: 1px solid #888;
+    width: 70%; 
+}
+
+.search-bar {
+    width: 300px;
+    margin: 25px auto;
+}
+
+form.search-input input[type=text] {
+    padding: 10px;
+    font-size: 17px;
+    /* border: 1px solid grey; */
+    float: left;
+    width: 80%;
+    background: #decece;
+  }
+  
+  form.search-input button {
+    float: left;
+    width: 20%;
+    padding: 10px;
+    background: #2196F3;
+    color: white;
+    font-size: 17px;
+    border: 1px solid grey;
+    border-left: none;
+    cursor: pointer;
+    margin: auto;
+  }
+  
+  form.search-input button:hover {
+    background: #0b7dda;
+  }
+  
+  form.search-input::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+  .logout {
+    position: fixed;
+    right: 20px;
+  }
+  .logout button {
+    padding: 5px 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #04AA6D;
+    border: none;
+  }
+
+  .span-link {
+    color: #000;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+/* Add Zoom Animation */
+.animate {
+    -webkit-animation: animatezoom 1.0s;
+    animation: animatezoom 1.0s
+}
+
+@-webkit-keyframes animatezoom {
+    from {-webkit-transform: scale(0)} 
+    to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+    from {transform: scale(0)} 
+    to {transform: scale(1)}
+}
+
+@media only screen and (max-width: 360px) {
+    .chip {
+        padding: 15px 15px;
+        margin-bottom: 10px;
+        height: 50px;
+        font-size: 12px;
+        line-height: 10px;
+        border-radius: 15px;
+        cursor: pointer;
+    }
+
+    .chip img {
+        float: left;
+        margin: 0 0 0 -20px;
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+    }
+
+    
+    .logout {
+        right: 5px;
+    }
+    #logout-btn, #reports-btn {
+        padding: 1px 5px;
+        font-size: 14px;
+    }
+}
+
+/* ------------------------------- END OF FILE ------------------------------ */

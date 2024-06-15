@@ -1,0 +1,208 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DETAINEE LOCATOR</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="html2canvas.min.js"></script>
+</head>
+
+<body class="all-content">
+
+    <div id="mainpage">
+        <div class="header" id="myHeader">
+            <button class="tablink" onclick="openPage('home', this)"  id="defaultOpen">FIND DETAINEE</button>
+            <button class="tablink" onclick="openPage('setting', this)" id="adminPanel">ADMIN</button>
+        </div>
+    
+        <div class="content">
+      
+            <div id="home" class="tabcontent">
+                <div class="homecontent animate">
+                    <div class="search-bar">
+                        <form name="search-form" class="search-input" action="" onsubmit="return handleSearch()" method="post">
+                            <input type="text" placeholder="NIN or name..." name="search" id="search">
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                    <div class="search-results" id="detainee-results">
+                        <!-- <div class="chip">
+                            <img src="img_avatar.png" alt="Person" width="96" height="96">
+                            <span>Namuhooma Beautrice sserwadaamu</span>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="animate">
+                    <div class="card" id="detainee-card">
+                        <!-- <img src="img_avatar.png" alt="John" style="width:100%">
+                        <h1>John Doe</h1>
+                        <p>CEO & Founder, Example</p>
+                        <p>Harvard University</p> -->
+                    </div>
+                </div>
+            </div>
+              
+            <div id="setting" class="tabcontent">
+                <div id="loginpage" class="modal">
+  
+                    <form name="logmein" class="modal-content animate" action="" onsubmit="return handleLogin()" method="post">
+                      <div class="imgcontainer">
+                        <!-- <img src="logo_with_name.jpg" alt="Avatar" class="avatar"> -->
+                        <p id="loginmsg" class="errormsg">Please login to continue</p>
+                      </div>
+                          
+                      <div class="container">
+                        <label for="username"><b>Username</b></label>
+                        <input type="text" placeholder="Enter Username" name="username" id="username" required>
+                  
+                        <label for="userkey"><b>Password</b></label>
+                        <input type="password" placeholder="Enter Password" name="userkey" id="userkey" required>
+                          
+                        <button class="button" type="submit">Login</button>
+                        
+                        <label>
+                        <b><span class="span-link" onclick="document.getElementById('defaultOpen').click();">Find Detainee</span></b>
+                        </label>
+                      </div>
+            
+                    </form>
+                </div>
+                <div id="reportpage" class="modal">
+                    <div class="container">
+                        <label for="username"><b>Detainee Report</b></label>
+                        <input type="date" name="start-date" id="start-date" onchange="handleReports()">
+                        <input type="date" name="stop-date" id="stop-date" onchange="handleReports()">
+                    </div>
+                    <div class="report-table" id="reported-table">
+                        <div id="table-header"></div>
+                        <table id="filled-report">
+                            <!-- <tr>
+                                <th>Date of Arrest</th>
+                                <th>Full Names</th>
+                                <th>Current Location</th>
+                              </tr>
+                              <tr>
+                                <td>Jill</td>
+                                <td>Smith</td>
+                                <td>50</td>
+                              </tr> -->
+                        </table>
+                        <div id="table-footer"></div>
+                    </div>
+                    <div class="logout">
+                        <button id="print-btn" onclick="printReport()">Print pdf</button>
+                        <button id="print-btn" onclick="document.getElementById('reportpage').style.display = 'none';">Back</button>
+                    </div>
+
+                </div>
+                <div class="logout" id="logoutpoint">
+                    <button id="reports-btn" onclick="handleReports()">Reports</button>
+                    <button id="logout-btn" onclick="handleLogout()">Logout</button>
+                </div>
+                <div id="createcenterPage" class="modal">
+  
+                    <form name="createcenter" class="modal-content animate" action="" onsubmit="return newCenter()" method="post">
+                      <div class="imgcontainer">
+                        <p id="center-msg" class="errormsg">Please fill in all feilds</p>
+                      </div>
+                          
+                      <div class="container">
+                        <label for="centername"><b>center name</b></label>
+                        <input type="text" placeholder="center name" name="centername" id="centername" required>
+
+                        <label for="location"><b>Location</b></label>
+                        <input type="text" placeholder="area/district" name="location" id="location" required>
+                        
+                        <label for="mappin"><b>Google pin</b></label>
+                        <input type="text" placeholder="URL from map" name="mappin" id="mappin" required>
+                  
+                        <button class="button" type="submit">Create</button>
+                        
+                        <label>
+                          <b><span class="span-link" onclick="closeCenterForm()">Cancel</span></b>
+                        </label>
+                      </div>
+            
+                    </form>
+                </div>
+                
+                <div id="detainee-form">
+                    <form class="homecontent animate" action="" onsubmit="return updateSettings()" method="post">
+                                                
+                        <div class="inputholder">
+                            <label for="fullname"><b>Name:</b></label>
+                            <input type="text" placeholder="full names" name="fullname" id="fullname" required>
+                        </div>
+                                                
+                        <div class="inputholder">
+                            <label for="national_id"><b>ID Number:</b></label>
+                            <input type="text" placeholder="verifiable ID" name="national_id" id="national_id" required>
+                        </div>
+
+                        <div class="inputholder">
+                            <label for="age"><b>Age:</b></label>
+                            <input type="number" placeholder="age in years" name="age" id="age" min="5" max="120">
+                        </div>
+                        
+                        <div class="inputholder">
+                            <label for="arrest_date"><b>Arrest Time:</b></label>
+                            <input type="datetime-local" name="arrest_date" id="arrest_date" max="2024-12-31">
+                        </div>
+                        
+                        <div class="inputholder">
+                            <label for="arrest_area"><b>Arrest From:</b></label>
+                            <input type="text" name="arrest_area" id="arrest_area" placeholder="Area of arrest">
+                        </div>
+
+                        <div class="inputholder">
+                            <label for="center_id"><b>Detained:</b></label>
+                            <select class="pointer" name="center_id" id="center_id" onchange="openCenterForm()" required>
+                                <option value="0">none</option>
+                                <option value="999"><button class="pointer">New center...</button></option>
+                            </select>
+                        </div>
+                            
+                        <div class="inputholder">
+                            <label for="charged"><b>Charges:</b></label>
+                            <input type="text" placeholder="reason for arrest" name="charged" id="charged">
+                        </div>
+
+                        <div class="inputholder">
+                            <img src="images/img_avatar.png" alt="No passport" id="passport" style="max-width: 150px;"">
+                            <input type="file" class="pointer" name="pp_file" id="pp_file" onchange="previewPassport()">
+                        </div>
+
+                        <div class="inputholder">
+                            <select class="pointer" name="edit" id="edit" hidden>
+                                <option value="1">no</option>
+                                <option value="2">yes</option>
+                            </select>
+                        </div>
+                            
+                        <div class="inputholder pointer">
+                            <button type="submit" id="settingupdate">upload</button>
+                            <input type="reset" class="pointer" id="reset-btn" onclick="clearPassport()">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer" id="myFooter">
+            <a href="tel:+256703473644">
+                <button class="footerlink">Call</button>
+            </a>
+
+            <a href="mailto:info@techcrunchltd.com">
+                <button class="footerlink">Email
+                </button>
+            </a>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
