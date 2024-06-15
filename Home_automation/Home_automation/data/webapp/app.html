@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HomeApp</title>
+    <link rel="icon" type="image" href="logo_white.png">
+    <link rel="stylesheet" href="app.css">
+    <script src="jquery.js"></script>
+</head>
+
+<body class="all-content">
+
+    <div id="loginpage" class="modal">
+  
+        <form name="logmein" class="modal-content animate" action="" onsubmit="return handleLogin()" method="post">
+          <div class="imgcontainer">
+            <!-- <img src="logo_with_name.jpg" alt="Avatar" class="avatar"> -->
+            <p id="loginmsg">Please login to continue</p>
+          </div>
+              
+          <div class="container">
+            <label for="username"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="username" id="username" required>
+      
+            <label for="userkey"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="userkey" id="userkey" required>
+              
+            <button class="button" type="submit">Login</button>
+            <label>
+              <span >Need <a href="tel:+256784356760">Help?</a></span>
+            </label>
+          </div>
+
+        </form>
+    </div>
+
+    <div id="mainpage">
+        <div class="header" id="myHeader">
+            <button class="tablink" onclick="openPage('home', this)"  id="defaultOpen">HOME</button>
+            <button class="tablink" onclick="openPage('periods', this)">PERIODS</button>
+            <button class="tablink" onclick="openPage('setting', this)">SETTINGS</button>
+
+        </div>
+    
+        <div class="content">
+      
+            <div id="home" class="tabcontent">
+                <h3>AUTO HOME SYSTEM</h3>
+                <div class="homecontent animate">
+                    <img src="light_off.jpg" alt="light-image" id="lightimage"><br />
+                    <button id="switchlight" onclick="switchLight()">Turn On Light</button>
+                </div>
+            </div>
+              
+            <div id="periods" class="tabcontent">
+                <!-- <div class="dropdown">
+                    <button class="dropbtn" id="selectday"> 
+                        MONDAY<i class="arrow"></i>
+                    </button>
+                    <div id="dropdays" class="dropcontent">
+                        <span onclick="pickDay('monday')">MONDAY</span>
+                        <span onclick="pickDay('tuesday')">TUESDAY</span>
+                        <span onclick="pickDay('wednesday')">WEDNESDAY</span>
+                        <span onclick="pickDay('thursday')">THURSDAY</span>
+                        <span onclick="pickDay('friday')">FRIDAY</span>
+                        <span onclick="pickDay('saturday')">SATURDAY</span>
+                        <span onclick="pickDay('sunday')">SUNDAY</span>
+                        <span onclick="pickDay('all days')">ALL DAYS</span>
+                    </div>
+                </div>
+                <form class="homecontent animate" action="" onsubmit="return updateAlarms()">
+                    <div class="alarmfield" id="alarmfields"></div>
+                    <div class="inputholder pointer">
+                        <button type="submit" id="alarmupdate">update</button>
+                    </div>
+                </form>
+                <button class="alarmbtn pointer" onclick="addAlarm('add')">Add</button>
+                <button class="alarmbtn pointer" onclick="addAlarm('sub')">delete</button> -->
+                <p>periods are currently disbaled!</p>
+            </div>
+              
+            <div id="setting" class="tabcontent">
+                <h3>HOME CONFIGURATIONS</h3>
+                <form class="homecontent animate" action="" onsubmit="return updateSettings()" method="post">
+                    <div class="inputholder">
+                        <label for="whatsapp"><b>WhatsApp:</b></label>
+                        <input type="text" placeholder="256784356760" name="whatsapp" id="whatsapp">
+                    </div>
+                                            
+                    <div class="inputholder">
+                        <label for="institute"><b>Wifi name:</b></label>
+                        <input type="text" placeholder="wifiname" name="institute" id="institute">
+                    </div>
+                                            
+                    <div class="inputholder">
+                        <label for="newuserkey"><b>Password:</b></label>
+                        <input type="password" placeholder="wifipassword" name="newuserkey" id="newuserkey">
+                    </div>
+
+                    <div class="inputholder">
+                        <label for="alarmstate"><b>Updates:</b></label>
+                        <select class="pointer" name="alarmstate" id="alarmstate">
+                            <option value="off">off</option>
+                            <option value="on">on</option>
+                        </select>
+                    </div>
+                        
+                    <div class="inputholder">
+                        <label for="duration"><b>Update Interval:</b></label>
+                        <input type="number" placeholder="10" name="duration" id="duration" min="1" style="width: 50px;">
+                    </div>
+                        
+
+                    <div class="inputholder pointer">
+                        <button type="submit" id="settingupdate">update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="footer" id="myFooter">
+            <a href="tel:+256760401">
+                <button class="footerlink">Call us</button>
+            </a>
+
+            <a href="https://api.whatsapp.com/send?phone=256784356760&text=I need some help!">
+                <button class="footerlink">WhatsApp
+                </button>
+            </a>
+
+            <a href="mailto:info@techcrunchltd.com">
+                <button class="footerlink">Email
+                </button>
+            </a>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
