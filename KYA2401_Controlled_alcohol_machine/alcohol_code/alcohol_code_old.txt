@@ -1,0 +1,413 @@
+/*
+*@brief project code for the alcohol detection to control motor operation
+*@note  connect all pins as defined in the macros
+*/
+
+#define REVERSE         3
+#define FORWARD         4
+#define ENABLE          5
+#define BUZZER          9
+#define LED             13
+#define SENSOR_DG       14
+#define SENSOR_AN       A0
+#define READ_SPEED      A1
+#define FORWARD_BUTTON  A2
+#define REVERSE_BUTTON  A3
+#define PWM_VAL         50
+#define DELAY           250
+#define START_DELAY_SEC 10
+#define STOP_WAIT_SEC   30
+#define ALCOHOL_VALUE   50
+#define BREATH_VALUE    20
+#define BREATH_RISE     5
+#define CLOCKWISE       true
+#define ANTI_CLOCKWISE  false
+#define SMILE           byte(0)
+#define TICK            byte(1)
+#define WRONG           byte(2)
+
+// #include <LiquidCrystal.h>
+#include <Wire.h>
+#include <LiquidCrystal_PCF8574.h>
+
+// const int rs = 6, en = 7, d4 = 8, d5 = 10, d6 = 11, d7 = 12;
+// LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+LiquidCrystal_PCF8574 lcd(0x27);  // set the LCD address to 0x20, 0x27, or 0x3F
+
+enum MOTOR_STATE {
+  MACHINE_ERROR = -1,
+  IDLE,
+  RUN_START,
+  RUN_FORWARD,
+  RUN_REVERSE,
+};
+
+enum SENSOR_STATE {
+  NO_BREATHE,
+  NORMAL_BREATHE,
+  ALCOHOL_BREATHE
+};
+
+// make some custom characters:
+byte heart[8] = {
+  0b00000,
+  0b01010,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b01110,
+  0b00100,
+  0b00000
+};
+
+byte tick[8] = {
+  0b00000,
+  0b00001,
+  0b00010,
+  0b10100,
+  0b01000,
+  0b00000,
+  0b00000,
+  0b00000
+};
+
+byte wrong[8] = {
+  0b00000,
+  0b10001,
+  0b01010,
+  0b00100,
+  0b01010,
+  0b10001,
+  0b00000,
+  0b00000
+};
+
+MOTOR_STATE currentState = IDLE;
+SENSOR_STATE previousState = NO_BREATHE;
+unsigned long timePassedStart = 0;
+unsigned long timePassedStop = 0;
+static int SensorValue = 0;
+
+uint8_t readSpeed()
+{
+  return (map(analogRead(READ_SPEED), 0, 950, 150, 255));
+}
+
+MOTOR_STATE getMotorState()
+{
+  if( digitalRead(REVERSE_BUTTON) && digitalRead(FORWARD_BUTTON))
+    return MACHINE_ERROR;
+  
+  if( digitalRead(REVERSE_BUTTON) && !digitalRead(FORWARD_BUTTON)) 
+    return RUN_REVERSE;
+  
+  if( digitalRead(FORWARD_BUTTON) && !digitalRead(REVERSE_BUTTON)) 
+    return RUN_FORWARD;
+  
+  return (currentState == RUN_START) ? RUN_START : IDLE;
+}
+
+SENSOR_STATE getSensorState()
+{
+  int sensor_value = 0;
+  static  int prev_state = 0;
+  for(int i=0; i<5; i++){
+    int new_value = analogRead(SENSOR_AN);
+    if(new_value > sensor_value) sensor_value = new_value;
+    delay(10);
+  }
+  Serial.println(sensor_value); //for debugging
+  SensorValue = sensor_value;
+  
+  if(previousState == ALCOHOL_BREATHE && currentState != IDLE){
+    
+    if(millis() - timePassedStop >= (STOP_WAIT_SEC*1000)){
+      Serial.println("stopped...");
+      previousState = NO_BREATHE;
+    }
+  }
+  else {
+    Serial.println("start...");
+    timePassedStop = millis();
+  }
+
+// Serial.println("set at ALCOHOL1"); //for debugging
+//Dont change state before exiting alcohol detected state
+  if( (previousState == ALCOHOL_BREATHE) && ((sensor_value >= ALCOHOL_VALUE) || ( (prev_state + BREATH_RISE) > sensor_value ) ) ){
+      prev_state = sensor_value;
+      return ALCOHOL_BREATHE;
+  }
+
+// Serial.println("set at NORMAL1"); //for debugging
+  //Dont change state when waiting for operator to press button or running normally
+  if( (sensor_value < ALCOHOL_VALUE) && ((currentState == RUN_START) || ((previousState == NORMAL_BREATHE) && (currentState != IDLE))))
+    return NORMAL_BREATHE;
+
+  
+/* ------------------------------ get new state ----------------------------- */
+// Serial.println("set at LEVEL2"); //for debugging
+  if(sensor_value >= ALCOHOL_VALUE) {
+    currentState = IDLE;
+    timePassedStop = millis();
+    prev_state = sensor_value;
+    return ALCOHOL_BREATHE;
+  }
+  else if(sensor_value > BREATH_VALUE)   {
+    currentState = RUN_START;
+    timePassedStart = millis();
+    return NORMAL_BREATHE;
+  }
+  else{
+    currentState = IDLE;
+    return NO_BREATHE;
+  }
+}
+
+void indicatorOff()
+{
+  digitalWrite( BUZZER, LOW);
+  digitalWrite( LED, LOW);
+}
+
+void indicatorOn()
+{
+  static bool prev_state = false;
+  static unsigned prev_millis = 0;
+  
+  if( millis() - prev_millis > DELAY){
+    if(prev_state){
+      analogWrite( BUZZER, PWM_VAL);
+      digitalWrite( LED, HIGH);
+    }
+    else {
+      analogWrite( BUZZER, 0);
+      digitalWrite( LED, LOW);
+    }
+
+    prev_state = !prev_state;
+    prev_millis = millis();
+  }
+}
+
+void motorOff()
+{
+  analogWrite(ENABLE, LOW);
+  digitalWrite(FORWARD, LOW);
+  digitalWrite(REVERSE, LOW);
+}
+
+void motorOn( bool reverse)
+{
+  analogWrite(ENABLE, readSpeed());
+  digitalWrite(FORWARD, !reverse);
+  digitalWrite(REVERSE, reverse);
+}
+
+void errorOccured()
+{
+  lcd.clear();
+  lcd.print("SERIOUS ERROR...");
+  lcd.setCursor(0, 1);
+  lcd.print("CHECK CONNECTION");
+  Serial.println("HARDFAULT OCCURED!");
+  indicatorOff();
+  motorOff();
+  digitalWrite(LED, HIGH);
+  while(1);
+}
+
+void initInputs()
+{
+  pinMode(SENSOR_AN, INPUT);
+  // pinMode(SENSOR_DG, INPUT);
+  pinMode(READ_SPEED, INPUT);
+  pinMode(REVERSE_BUTTON, INPUT);
+  pinMode(FORWARD_BUTTON, INPUT);
+}
+
+void initOutputs()
+{
+  pinMode(LED, OUTPUT);
+  pinMode(BUZZER, OUTPUT);
+  pinMode(ENABLE, OUTPUT);
+  pinMode(FORWARD, OUTPUT);
+  pinMode(REVERSE, OUTPUT);
+
+  indicatorOff();
+  motorOff();
+}  
+
+void printLevel()
+{
+    if(SensorValue >= 100){
+      lcd.setCursor(12,0);
+      lcd.print(SensorValue);
+    }
+    else{
+      lcd.setCursor(13,0);
+      lcd.print(SensorValue/10);
+      lcd.print(SensorValue%10);
+    }
+    lcd.print("%");
+}
+
+void lcdInit()
+{ 
+  Wire.begin();
+  Wire.beginTransmission(0x27);
+  int error = Wire.endTransmission();
+
+  if (error == 0) {
+    Serial.println(": LCD found.");
+    lcd.begin(20, 4);  // initialize the lcd
+  } 
+  else {
+    Serial.println(": LCD not found.");
+  }
+  lcd.setBacklight(255);
+}
+
+void setup()
+{
+  Serial.begin(9600);
+  initInputs();
+  initOutputs();
+  
+  // lcd.begin(16, 2);
+  lcdInit();
+  
+  // create a new character
+  lcd.createChar(0, heart);
+  lcd.createChar(1, tick);
+  lcd.createChar(2, wrong);
+
+  lcd.clear();
+  lcd.print("  PROJECT BY:   ");
+  Serial.println("  PROJECT BY:   ");
+  delay(2000);
+  lcd.setCursor(0, 1);
+  lcd.print("WILSON AND YONAH");
+  delay(5000);
+
+  uint8_t wait_abit = 0;
+  while(1){
+    lcd.clear();
+    lcd.print("MQ LEVEL: "); lcd.print(analogRead(SENSOR_AN));
+    lcd.print("%");          lcd.setCursor(0, 1);
+    lcd.print("Calibrating..."); //lcd.print(analogRead(READ_SPEED));
+    Serial.print(analogRead(SENSOR_AN));Serial.println(": Calibrating...");
+    if(analogRead(SENSOR_AN) < BREATH_VALUE) wait_abit++;
+    if(analogRead(SENSOR_AN) > BREATH_VALUE) wait_abit = 0;
+    Serial.println(wait_abit);
+    delay(1000);
+    if((analogRead(SENSOR_AN) < BREATH_VALUE) && (wait_abit > 10)) break;
+  } 
+  Serial.println("STARTED...");
+}
+
+void handleDrunkard()
+{
+  Serial.println("ALCOHOL DETECTED STATE");
+  indicatorOn();
+  lcd.print("ALCOHOL BREATHE "); lcd.write(WRONG);
+  lcd.setCursor(0,1);
+  motorOff();
+  currentState = getMotorState();
+  switch(currentState){
+    case MACHINE_ERROR:
+      errorOccured();
+    case IDLE:
+      lcd.print("OPERATOR FLAGGED"); //no button press
+      break;
+    default:
+      lcd.print("OPERATION DENIED"); //button pressed
+  }
+}
+
+void handleNormal()
+{
+  Serial.println("NORMAL BREATH");
+  indicatorOff();
+  lcd.print("NORMAL BREATHE "); lcd.write(TICK);
+  lcd.setCursor(0,1);
+  MOTOR_STATE new_state = getMotorState();
+  switch (new_state) {
+    case IDLE:
+        if(currentState != IDLE) {
+          Serial.println("NORMAL EXIT");
+          currentState = new_state;
+          
+          break;
+        }
+        motorOff();
+        lcd.print("NO OPERATION YET");
+        Serial.println("NO OPERATION YET");
+        break;
+
+    case RUN_START:
+        motorOff();
+        lcd.print("SET SPEED & DIR.");
+        Serial.println("SET SPEED & DIRECTION");
+        if(millis() - timePassedStart >= (START_DELAY_SEC*1000)){
+          new_state = IDLE;
+        }
+        break;
+
+    case RUN_FORWARD:
+        motorOn(CLOCKWISE);
+        lcd.print("FORWARD @");
+        Serial.print("FORWARD @");
+        lcd.print(map(analogRead(READ_SPEED), 0, 950, 40, 100)); lcd.print("%");
+        Serial.print(map(analogRead(READ_SPEED), 0, 950, 40, 100)); Serial.println("%");
+        break;
+
+    case RUN_REVERSE:
+        motorOn(ANTI_CLOCKWISE);
+        lcd.print("REVERSE @");
+        Serial.print("REVERSE @");
+        lcd.print(map(analogRead(READ_SPEED), 0, 950, 50, 100)); lcd.print("%");
+        Serial.print(map(analogRead(READ_SPEED), 0, 950, 50, 100)); Serial.println("%");
+        break;
+    
+    default:
+        errorOccured();
+  }
+  currentState = new_state;
+}
+
+void loop() 
+{
+  Serial.print("MQ LEVEL: ");//debugging
+  lcd.clear();
+
+  previousState = getSensorState();
+  
+  switch (previousState)
+  {
+    case NO_BREATHE:
+      Serial.println("NO BREATH, WAITING...");
+      motorOff();
+      indicatorOff();
+      lcd.print("NO BREATHE "); lcd.write(SMILE);
+      lcd.setCursor(0,1);
+      lcd.print("WAITING...");
+      break;
+
+    case NORMAL_BREATHE:
+      handleNormal();
+      break;
+
+    case ALCOHOL_BREATHE:
+      handleDrunkard();
+      break;
+
+    default:
+      Serial.println("SOMETHING WIRED!");
+      errorOccured();
+      break;
+  }
+
+  printLevel();
+
+  delay(1000);
+}
