@@ -10,8 +10,8 @@
 #define SEND_INTERVAL_SECS 5
 
 /* ----------------------------- WIFI CONNECTION ---------------------------- */
-  const char* ssid = "boffins_mobile";
-  const char* password = "Boffins@13";
+  const char* ssid = "PowerUP_Lab";
+  const char* password = "#powerup2";
   WiFiClient wifiClient;
   
   /// @brief connect to wifi using the given credentials
